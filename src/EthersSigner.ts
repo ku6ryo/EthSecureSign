@@ -1,7 +1,7 @@
 import { ethers, Wallet } from "ethers";
-import { Signer } from "./Signer";
+import { ISigner } from "./ISigner";
 
-export class EthersSigner implements Signer {
+export class EthersSigner implements ISigner {
   #wallet: Wallet
   constructor() {
     this.#wallet = ethers.Wallet.createRandom()

@@ -1,5 +1,5 @@
 
-export interface Signer {
+export interface ISigner {
   /**
    * Returns address of the signer.
    */

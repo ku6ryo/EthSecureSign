@@ -1,7 +1,8 @@
 import Web3 from "web3"
 import { Account } from "web3-core"
+import { ISigner } from "./ISigner"
 
-export class Web3JsSigner {
+export class Web3JsSigner implements ISigner {
   #account: Account
 
   constructor() {
