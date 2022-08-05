@@ -3,7 +3,8 @@ import { TokenIssuer } from "./TokenIssuer"
 import { Web3JsSigner } from "./Web3JsSigner"
 
 describe("All tests", () => {
-  it("Using ethers success", async () => {
+
+  it("Using ethers, succeeds", async () => {
     const signer = new EthersSigner()
     const verifier = new TokenIssuer("secret")
     const message = verifier.issueToken()
@@ -12,7 +13,7 @@ describe("All tests", () => {
     expect(recoveredPublicKey).toBe(signer.getAddress())
   })
 
-  it("Using web3 succcess", async () => {
+  it("Using web3, succceeds", async () => {
     const signer = new Web3JsSigner()
     const verifier = new TokenIssuer("secret")
     const message = verifier.issueToken()
@@ -21,7 +22,7 @@ describe("All tests", () => {
     expect(recoveredPublicKey).toBe(signer.getAddress())
   })
 
-  it("Using web3 fail because of invalid token", async () => {
+  it("Using web3, fails because of the invalid token", async () => {
     const signer = new Web3JsSigner()
     const verifier = new TokenIssuer("secret")
     const token = "Invalid token"
@@ -31,7 +32,7 @@ describe("All tests", () => {
     })()).rejects.toThrow()
   })
 
-  it("Using web3 fail because of token expired", async () => {
+  it("Using web3, fails because of the token expired", async () => {
     const signer = new Web3JsSigner()
     const verifier = new TokenIssuer("secret")
     const token = verifier.issueToken(new Date(0))
@@ -41,7 +42,7 @@ describe("All tests", () => {
     })()).rejects.toThrow()
   })
 
-  it("Fail because of invalid sign", async () => {
+  it("Fails because of the invalid sign", async () => {
     const verifier = new TokenIssuer("secret")
     const token = verifier.issueToken()
     const sign = "Invalid sign"
