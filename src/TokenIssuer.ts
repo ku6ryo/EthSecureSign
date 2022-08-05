@@ -32,14 +32,16 @@ export class TokenIssuer {
   }
 
   /**
+   * @param address Wallet address that will be included in the token.
    * @param expiresAt Optional. Do not use except for testing.
    * @returns Token
    */
-  issueToken(expiresAt?: Date) {
+  issueToken(address: string, expiresAt?: Date) {
     return jwt.sign({
       exp: Math.floor((expiresAt ? expiresAt.getTime() : Date.now()) / 1000) + this.#expiresIn,
       sub: this.#subject,
       iss: this.#issuer,
+      data: address,
     }, this.#secret);
   }
 
@@ -48,7 +50,7 @@ export class TokenIssuer {
    * @param token JWT
    * @returns 
    */
-  async verifyToken(token: string): Promise<void> {
+  async verifyToken(token: string): Promise<string> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, this.#secret, (err, payload) => {
         if (err) {
@@ -64,7 +66,10 @@ export class TokenIssuer {
           if (payload.iss !== this.#issuer) {
             throw new Error("Invalid issuer")
           }
-          resolve()
+          if (typeof payload.data !== "string") {
+            throw new Error("Data empty")
+          }
+          resolve(payload.data)
         } catch (e) {
           reject(e)
         }
@@ -79,7 +84,11 @@ export class TokenIssuer {
    * @returns 
    */
   async verifyAndGetSignerAddress(token: string, sign: string): Promise<string> {
-    await this.verifyToken(token)
-    return verifyMessage(token, sign)
+    const address = await this.verifyToken(token)
+    const recovered = verifyMessage(token, sign)
+    if (address !== recovered) {
+      throw new Error("Token is not for signer")
+    }
+    return recovered
   }
 }
