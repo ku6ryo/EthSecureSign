@@ -1,6 +1,8 @@
 Demo of securely sending Ethereum wallet address to server.
 This repository is for showing how to sending wallet addresses from clients to a server by proving their owners and preventing front loading.
 
+CAVEATS: This method does not work for the case the private key of a wallet address is stolen or the JWT token is stolen by network sneaking.
+
 # Communication flow
 0. A client sends its wallet address to the server.
 1. The server issues JWT token for the address and return it to the client. The JWT token is signed with secret and it has expiration datetime in it.
